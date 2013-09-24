@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ListView;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.json.gson.GsonFactory;
@@ -55,6 +57,8 @@ public class QuoteListActivity extends ListActivity {
 //        MovieQuoteArrayAdapter adapter = new MovieQuoteArrayAdapter(this, android.R.layout.simple_expandable_list_item_2, android.R.id.text1, testQuotes);
 //        setListAdapter(adapter);
     }
+    
+    
 
     private class QueryQuotesTask extends AsyncTask<Void, Void, MovieQuoteCollection> {
   	  Context context;
@@ -78,17 +82,20 @@ public class QuoteListActivity extends ListActivity {
   			  Log.d(MQ, "No quotes received");
   			  return;
   		  }
-  		  
   		  Log.d(MQ, "Received " + quotes.getItems().size() + " movie quotes.");
           MovieQuoteArrayAdapter adapter = new MovieQuoteArrayAdapter(context, android.R.layout.simple_expandable_list_item_2, android.R.id.text1, quotes.getItems());
           setListAdapter(adapter);
-//          ((QuoteListActivity)context).setListAdapter(adapter);
-//  		  for (MovieQuote quote : quotes.getItems()) {
-//  			  
-//  		  }
-  		  
+          
+          // TODO: Add a long press listener similar to the ArmScripts app.
   	  }
   	}
+    
+    @Override
+	protected void onListItemClick(ListView listView, View selectedView, int position, long id) {
+		super.onListItemClick(listView, selectedView, position, id);
+		
+		// Show a Toast or other dialog.
+	}
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -6,7 +6,7 @@ from protorpc import remote
 
 from models import MovieQuote
 
-@endpoints.api(name='moviequotes', version='v1', description='Movie Quotes API', hostname='fisherds-movie-quotes')
+@endpoints.api(name='moviequotes', version='v1', description='Movie Quotes API', hostname='fisherds-movie-quotes.appspot.com')
 class MovieQuotesApi(remote.Service):
     """ Class which defines moviesquotes API"""
     

@@ -25,5 +25,4 @@ public class MovieQuoteArrayAdapter extends ArrayAdapter<MovieQuote> {
 		textView1.setText(getItem(position).getQuote());
 		return view;
 	}
-
 }

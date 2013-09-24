@@ -16,9 +16,18 @@
 #
 import webapp2
 
+from google.appengine.ext.webapp import template
+from models import MovieQuote
+
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Hello world! Dave Fisher')
+        moviequotes = MovieQuote.query().order(-MovieQuote.last_touch_date_time).fetch(30)
+        self.response.out.write(template.render('templates/moviequotes.html', {'moviequotes': moviequotes}))
+
+    def post(self):
+        new_quote = MovieQuote(movie_title = self.request.get('movie_title'), quote = self.request.get('quote'))
+        new_quote.put()
+        self.redirect('/')
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
