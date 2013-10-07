@@ -36,7 +36,7 @@ public class QuoteListActivity extends ListActivity {
 	private static final String MQ = "MQ";
 	private static final boolean USE_LOCAL_HOST = false;
 //	private static final String LOCAL_HOST_URL = "http://137.112.46.122:8080/_ah/api/";
-	// private static final String LOCAL_HOST_URL = "http://10.0.1.11:8080/_ah/api/";
+//  private static final String LOCAL_HOST_URL = "http://10.0.1.11:8080/_ah/api/";
 	private static final String LOCAL_HOST_URL = "http://10.0.1.3:8080/_ah/api/";
 	
 
