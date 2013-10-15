@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FD3F4237180654480076BD6B /* RHQuoteDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FD3F4236180654480076BD6B /* RHQuoteDetailViewController.m */; };
 		FD49223D17EBE0110015B836 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD49223C17EBE0110015B836 /* UIKit.framework */; };
 		FD49223F17EBE0110015B836 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD49223E17EBE0110015B836 /* Foundation.framework */; };
 		FD49224117EBE0110015B836 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD49224017EBE0110015B836 /* CoreGraphics.framework */; };
@@ -56,6 +57,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FD3F4235180654480076BD6B /* RHQuoteDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHQuoteDetailViewController.h; sourceTree = "<group>"; };
+		FD3F4236180654480076BD6B /* RHQuoteDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHQuoteDetailViewController.m; sourceTree = "<group>"; };
 		FD49223917EBE0110015B836 /* Movie Quotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Movie Quotes.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FD49223C17EBE0110015B836 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		FD49223E17EBE0110015B836 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -306,6 +309,8 @@
 				FD49225917EBE0380015B836 /* iPhoneStoryboard.storyboard */,
 				FD4922C717EBE13C0015B836 /* RHQuotesViewController.h */,
 				FD4922C817EBE13C0015B836 /* RHQuotesViewController.m */,
+				FD3F4235180654480076BD6B /* RHQuoteDetailViewController.h */,
+				FD3F4236180654480076BD6B /* RHQuoteDetailViewController.m */,
 			);
 			name = iPhone;
 			sourceTree = "<group>";
@@ -384,6 +389,7 @@
 				FD49229617EBE06B0015B836 /* GTLBatchQuery.m in Sources */,
 				FD49229717EBE06B0015B836 /* GTLBatchResult.m in Sources */,
 				FD49229817EBE06B0015B836 /* GTLDateTime.m in Sources */,
+				FD3F4237180654480076BD6B /* RHQuoteDetailViewController.m in Sources */,
 				FD49229917EBE06B0015B836 /* GTLErrorObject.m in Sources */,
 				FD49229A17EBE06B0015B836 /* GTLFramework.m in Sources */,
 				FD49229B17EBE06B0015B836 /* GTLJSONParser.m in Sources */,
@@ -529,6 +535,7 @@
 				FD49225817EBE0110015B836 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

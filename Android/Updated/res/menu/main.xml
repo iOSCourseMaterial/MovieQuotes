@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/add_quote"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="Add Quote"
+        android:titleCondensed="Add"
+        android:icon="@drawable/ic_action_new"/>
+    <item
+        android:id="@+id/force_sync"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+        android:title="Sync with backend"
+        android:titleCondensed="Sync"
+        android:icon="@drawable/ic_action_refresh"/>
+
+</menu>

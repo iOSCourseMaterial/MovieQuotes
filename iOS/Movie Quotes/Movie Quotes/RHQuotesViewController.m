@@ -8,12 +8,13 @@
 
 #import "RHQuotesViewController.h"
 #import "GTLMoviequotes.h"
-#import "RHQuoteDetailViewController_iPhone.h"
+#import "RHQuoteDetailViewController.h"
 #import "GTMHTTPFetcherLogging.h"
 
 
 #define kMovieQuoteCellIdentifier @"QuoteCell"
-#define LOCAL_HOST_TESTING YES
+#define kQuoteDetailSegue @"QuoteDetailSegue"
+#define LOCAL_HOST_TESTING NO
 
 @interface RHQuotesViewController ()
 @property (nonatomic, readonly) GTLServiceMoviequotes* service;
@@ -72,6 +73,14 @@
 
     }
 }
+
+//- (void) tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
+//    
+//}
+//
+//- (BOOL) tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+//    return YES;
+//}
 
 #pragma mark - Endpoints
 
@@ -174,6 +183,26 @@
     [quoteTextField setSecureTextEntry:NO];
     [addQuoteAlert show];
 }
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [self performSegueWithIdentifier:kQuoteDetailSegue sender:self.movieQuotes[indexPath.row]];
+    
+}
+
+#pragma mark - Navigation
+
+// In a story board-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    
+    if ([segue.identifier isEqualToString:kQuoteDetailSegue]) {
+        RHQuoteDetailViewController* destination = segue.destinationViewController;
+        destination.movieQuote = sender;
+    }
+}
+
 
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
