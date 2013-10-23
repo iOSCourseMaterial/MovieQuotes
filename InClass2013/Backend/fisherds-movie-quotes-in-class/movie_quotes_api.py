@@ -22,7 +22,28 @@ class MovieQuotesApi(remote.Service):
         return a_quote
     
     # Read movie quotes
+    @MovieQuote.query_method(query_fields=('limit', 'order', 'pageToken'),
+                             path='moviequote/list',
+                             name='moviequote.list',
+                             http_method='GET')
+    def movie_quote_list(self, query):
+        """ Get a list of movie quotes. """
+        return query
     
     # Delete movie quote
+    @MovieQuote.method(request_fields=('id',),
+                       path='moviequote/delete/{id}',
+                       name='moviequote.delete',
+                       http_method='GET')
+    def movie_quote_delete(self, a_quote):
+        """ Delete a MovieQuote. """
+        # Check to make sure this quote really exist in the datastore.
+        if not a_quote.from_datastore:
+            raise endpoints.NotFoundException('No quote found with that id')
+        # Then delete it.
+        a_quote.key.delete()
+        return MovieQuote(quote='deleted')
+        
+        
 
 app = endpoints.api_server([MovieQuotesApi], restricted=False)
