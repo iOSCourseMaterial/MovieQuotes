@@ -18,10 +18,12 @@ class MovieQuotesApi(remote.Service):
     
     @MovieQuote.query_method(query_fields=('limit', 'order', 'pageToken'), path='quotes', http_method='GET', name='quotes.list')
     def quotes_list(self, query):
+        """ Return a list of quotes. """
         return query
     
     @MovieQuote.method(request_fields=('id',), path='quote/delete/{id}', http_method='GET', name='quote.delete')
     def quote_delete(self, a_quote):
+        """ Delete a quote. """
         if not a_quote.from_datastore:
             raise endpoints.NotFoundException("Quote not found.")
         a_quote.key.delete()
