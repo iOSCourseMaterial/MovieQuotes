@@ -10,7 +10,7 @@
 @class GTLMoviequotesMovieQuote;
 @class GTLServiceMoviequotes;
 
-#define LOCAL_HOST_TESTING NO
+#define LOCAL_HOST_TESTING YES
 
 @interface RHQuoteDetailViewController : UIViewController <UIAlertViewDelegate>
 

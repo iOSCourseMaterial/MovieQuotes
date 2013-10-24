@@ -30,6 +30,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -129,7 +130,7 @@
     if (_service == nil) {
         _service = [[GTLServiceMoviequotes alloc] init];
         if (LOCAL_HOST_TESTING) {
-            [_service setRpcURL:[NSURL URLWithString:@"http://localhost:8080/_ah/api/rpc?prettyPrint=false"]]; // Simulator
+            [_service setRpcURL:[NSURL URLWithString:@"http://localhost:21080/_ah/api/rpc?prettyPrint=false"]]; // Simulator
         }
         _service.retryEnabled = YES;
         [GTMHTTPFetcher setLoggingEnabled:YES];
@@ -185,6 +186,7 @@
         if (error == nil) {
             NSLog(@"Done with query for quotes! Returned %d quotes.", collection.items.count);
             self.movieQuotes = [collection.items mutableCopy];
+            self.initialQueryComplete = YES;
             [self.tableView reloadData];
         } else {
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error during query for quotes"
