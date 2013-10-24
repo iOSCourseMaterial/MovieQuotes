@@ -8,11 +8,17 @@
 
 #import <UIKit/UIKit.h>
 @class GTLMoviequotesMovieQuote;
+@class GTLServiceMoviequotes;
 
-@interface RHQuoteDetailViewController : UIViewController
+#define LOCAL_HOST_TESTING NO
+
+@interface RHQuoteDetailViewController : UIViewController <UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextView *movieTitleTextView;
 @property (weak, nonatomic) IBOutlet UITextView *quoteTextView;
 @property (nonatomic, strong) GTLMoviequotesMovieQuote* movieQuote;
+@property (nonatomic, weak) GTLServiceMoviequotes* service;
+
+- (IBAction)pressedEdit:(id)sender;
 
 @end
