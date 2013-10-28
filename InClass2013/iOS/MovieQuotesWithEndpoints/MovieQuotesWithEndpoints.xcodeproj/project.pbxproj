@@ -49,6 +49,14 @@
 		FDC18EB91819498E00157263 /* SBJsonBase.m in Sources */ = {isa = PBXBuildFile; fileRef = FDC18E9B1819498E00157263 /* SBJsonBase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		FDC18EBA1819498E00157263 /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = FDC18E9D1819498E00157263 /* SBJsonParser.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		FDC18EBB1819498E00157263 /* SBJsonWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = FDC18E9F1819498E00157263 /* SBJsonWriter.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		FDFCE222181E88F500CE746E /* RHMovieQuotesListViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = FDFCE221181E88F500CE746E /* RHMovieQuotesListViewController_iPhone.m */; };
+		FDFCE225181E891A00CE746E /* RHMovieQuoteDetailViewController_iPhone.m in Sources */ = {isa = PBXBuildFile; fileRef = FDFCE224181E891A00CE746E /* RHMovieQuoteDetailViewController_iPhone.m */; };
+		FDFCE227181E892A00CE746E /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FDFCE226181E892A00CE746E /* MainStoryboard_iPhone.storyboard */; };
+		FDFCE234181E8D1700CE746E /* GTLMoviequotesConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = FDFCE22B181E8D1700CE746E /* GTLMoviequotesConstants.m */; };
+		FDFCE235181E8D1700CE746E /* GTLMoviequotesMovieQuote.m in Sources */ = {isa = PBXBuildFile; fileRef = FDFCE22D181E8D1700CE746E /* GTLMoviequotesMovieQuote.m */; };
+		FDFCE236181E8D1700CE746E /* GTLMoviequotesMovieQuoteCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = FDFCE22F181E8D1700CE746E /* GTLMoviequotesMovieQuoteCollection.m */; };
+		FDFCE237181E8D1700CE746E /* GTLQueryMoviequotes.m in Sources */ = {isa = PBXBuildFile; fileRef = FDFCE231181E8D1700CE746E /* GTLQueryMoviequotes.m */; };
+		FDFCE238181E8D1700CE746E /* GTLServiceMoviequotes.m in Sources */ = {isa = PBXBuildFile; fileRef = FDFCE233181E8D1700CE746E /* GTLServiceMoviequotes.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,6 +146,22 @@
 		FDC18E9D1819498E00157263 /* SBJsonParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonParser.m; sourceTree = "<group>"; };
 		FDC18E9E1819498E00157263 /* SBJsonWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SBJsonWriter.h; sourceTree = "<group>"; };
 		FDC18E9F1819498E00157263 /* SBJsonWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SBJsonWriter.m; sourceTree = "<group>"; };
+		FDFCE220181E88F500CE746E /* RHMovieQuotesListViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHMovieQuotesListViewController_iPhone.h; sourceTree = "<group>"; };
+		FDFCE221181E88F500CE746E /* RHMovieQuotesListViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHMovieQuotesListViewController_iPhone.m; sourceTree = "<group>"; };
+		FDFCE223181E891A00CE746E /* RHMovieQuoteDetailViewController_iPhone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RHMovieQuoteDetailViewController_iPhone.h; sourceTree = "<group>"; };
+		FDFCE224181E891A00CE746E /* RHMovieQuoteDetailViewController_iPhone.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RHMovieQuoteDetailViewController_iPhone.m; sourceTree = "<group>"; };
+		FDFCE226181E892A00CE746E /* MainStoryboard_iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = MainStoryboard_iPhone.storyboard; sourceTree = "<group>"; };
+		FDFCE229181E8D1700CE746E /* GTLMoviequotes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLMoviequotes.h; sourceTree = "<group>"; };
+		FDFCE22A181E8D1700CE746E /* GTLMoviequotesConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLMoviequotesConstants.h; sourceTree = "<group>"; };
+		FDFCE22B181E8D1700CE746E /* GTLMoviequotesConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLMoviequotesConstants.m; sourceTree = "<group>"; };
+		FDFCE22C181E8D1700CE746E /* GTLMoviequotesMovieQuote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLMoviequotesMovieQuote.h; sourceTree = "<group>"; };
+		FDFCE22D181E8D1700CE746E /* GTLMoviequotesMovieQuote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLMoviequotesMovieQuote.m; sourceTree = "<group>"; };
+		FDFCE22E181E8D1700CE746E /* GTLMoviequotesMovieQuoteCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLMoviequotesMovieQuoteCollection.h; sourceTree = "<group>"; };
+		FDFCE22F181E8D1700CE746E /* GTLMoviequotesMovieQuoteCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLMoviequotesMovieQuoteCollection.m; sourceTree = "<group>"; };
+		FDFCE230181E8D1700CE746E /* GTLQueryMoviequotes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLQueryMoviequotes.h; sourceTree = "<group>"; };
+		FDFCE231181E8D1700CE746E /* GTLQueryMoviequotes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLQueryMoviequotes.m; sourceTree = "<group>"; };
+		FDFCE232181E8D1700CE746E /* GTLServiceMoviequotes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLServiceMoviequotes.h; sourceTree = "<group>"; };
+		FDFCE233181E8D1700CE746E /* GTLServiceMoviequotes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GTLServiceMoviequotes.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,11 +225,14 @@
 		FDC18E39181946F700157263 /* MovieQuotesWithEndpoints */ = {
 			isa = PBXGroup;
 			children = (
+				FDFCE239181E8D2700CE746E /* Moviequotes API */,
 				FDC18EBC18194A3A00157263 /* Google iOS Library */,
 				FDC18E42181946F700157263 /* RHAppDelegate.h */,
 				FDC18E43181946F700157263 /* RHAppDelegate.m */,
 				FDC18E45181946F700157263 /* Images.xcassets */,
 				FDC18E3A181946F700157263 /* Supporting Files */,
+				FDFCE228181E894900CE746E /* View Controllers */,
+				FDFCE226181E892A00CE746E /* MainStoryboard_iPhone.storyboard */,
 			);
 			path = MovieQuotesWithEndpoints;
 			sourceTree = "<group>";
@@ -304,6 +331,35 @@
 			name = "Google iOS Library";
 			sourceTree = "<group>";
 		};
+		FDFCE228181E894900CE746E /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				FDFCE220181E88F500CE746E /* RHMovieQuotesListViewController_iPhone.h */,
+				FDFCE221181E88F500CE746E /* RHMovieQuotesListViewController_iPhone.m */,
+				FDFCE223181E891A00CE746E /* RHMovieQuoteDetailViewController_iPhone.h */,
+				FDFCE224181E891A00CE746E /* RHMovieQuoteDetailViewController_iPhone.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		FDFCE239181E8D2700CE746E /* Moviequotes API */ = {
+			isa = PBXGroup;
+			children = (
+				FDFCE229181E8D1700CE746E /* GTLMoviequotes.h */,
+				FDFCE22A181E8D1700CE746E /* GTLMoviequotesConstants.h */,
+				FDFCE22B181E8D1700CE746E /* GTLMoviequotesConstants.m */,
+				FDFCE22C181E8D1700CE746E /* GTLMoviequotesMovieQuote.h */,
+				FDFCE22D181E8D1700CE746E /* GTLMoviequotesMovieQuote.m */,
+				FDFCE22E181E8D1700CE746E /* GTLMoviequotesMovieQuoteCollection.h */,
+				FDFCE22F181E8D1700CE746E /* GTLMoviequotesMovieQuoteCollection.m */,
+				FDFCE230181E8D1700CE746E /* GTLQueryMoviequotes.h */,
+				FDFCE231181E8D1700CE746E /* GTLQueryMoviequotes.m */,
+				FDFCE232181E8D1700CE746E /* GTLServiceMoviequotes.h */,
+				FDFCE233181E8D1700CE746E /* GTLServiceMoviequotes.m */,
+			);
+			name = "Moviequotes API";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -382,6 +438,7 @@
 			files = (
 				FDC18EB71819498E00157263 /* GTMOAuth2ViewTouch.xib in Resources */,
 				FDC18E3E181946F700157263 /* InfoPlist.strings in Resources */,
+				FDFCE227181E892A00CE746E /* MainStoryboard_iPhone.storyboard in Resources */,
 				FDC18E46181946F700157263 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -411,11 +468,13 @@
 				FDC18EB91819498E00157263 /* SBJsonBase.m in Sources */,
 				FDC18EA61819498E00157263 /* GTLJSONParser.m in Sources */,
 				FDC18EB51819498E00157263 /* GTMOAuth2SignIn.m in Sources */,
+				FDFCE225181E891A00CE746E /* RHMovieQuoteDetailViewController_iPhone.m in Sources */,
 				FDC18EA81819498E00157263 /* GTLQuery.m in Sources */,
 				FDC18EAA1819498E00157263 /* GTLService.m in Sources */,
 				FDC18E44181946F700157263 /* RHAppDelegate.m in Sources */,
 				FDC18EAB1819498E00157263 /* GTLUploadParameters.m in Sources */,
 				FDC18EA21819498E00157263 /* GTLBatchResult.m in Sources */,
+				FDFCE222181E88F500CE746E /* RHMovieQuotesListViewController_iPhone.m in Sources */,
 				FDC18EAC1819498E00157263 /* GTLUtilities.m in Sources */,
 				FDC18EB61819498E00157263 /* GTMOAuth2ViewControllerTouch.m in Sources */,
 				FDC18EB41819498E00157263 /* GTMOAuth2Authentication.m in Sources */,
@@ -423,9 +482,14 @@
 				FDC18EA31819498E00157263 /* GTLDateTime.m in Sources */,
 				FDC18EB31819498E00157263 /* GTMMIMEDocument.m in Sources */,
 				FDC18EBA1819498E00157263 /* SBJsonParser.m in Sources */,
+				FDFCE235181E8D1700CE746E /* GTLMoviequotesMovieQuote.m in Sources */,
 				FDC18EA11819498E00157263 /* GTLBatchQuery.m in Sources */,
+				FDFCE234181E8D1700CE746E /* GTLMoviequotesConstants.m in Sources */,
+				FDFCE236181E8D1700CE746E /* GTLMoviequotesMovieQuoteCollection.m in Sources */,
 				FDC18EA71819498E00157263 /* GTLObject.m in Sources */,
 				FDC18EAF1819498E00157263 /* GTMHTTPFetcherLogging.m in Sources */,
+				FDFCE237181E8D1700CE746E /* GTLQueryMoviequotes.m in Sources */,
+				FDFCE238181E8D1700CE746E /* GTLServiceMoviequotes.m in Sources */,
 				FDC18EA01819498E00157263 /* GTLBase64.m in Sources */,
 				FDC18EA51819498E00157263 /* GTLFramework.m in Sources */,
 				FDC18E40181946F700157263 /* main.m in Sources */,
@@ -632,6 +696,7 @@
 				FDC18E5E181946F700157263 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FDC18E5F181946F700157263 /* Build configuration list for PBXNativeTarget "MovieQuotesWithEndpointsTests" */ = {
 			isa = XCConfigurationList;
@@ -640,6 +705,7 @@
 				FDC18E61181946F700157263 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
