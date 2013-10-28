@@ -130,6 +130,7 @@
     if (_service == nil) {
         _service = [[GTLServiceMoviequotes alloc] init];
         if (LOCAL_HOST_TESTING) {
+            NSLog(@"Setting to localhost api url");
             [_service setRpcURL:[NSURL URLWithString:@"http://localhost:21080/_ah/api/rpc?prettyPrint=false"]]; // Simulator
         }
         _service.retryEnabled = YES;

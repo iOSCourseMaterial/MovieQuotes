@@ -1,6 +1,6 @@
 
 from protorpc import remote
-from google.appengine.ext import endpoints
+import endpoints
 
 from models import MovieQuote
 
