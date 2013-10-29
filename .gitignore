@@ -22,3 +22,6 @@ local.properties
 .project
 project.properties
 .settings/
+
+# Mac files
+*.DS_Store

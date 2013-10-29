@@ -14,6 +14,9 @@
 #define kLoadingMovieQuotesCellIdentifier @"LoadingMovieQuotesCell"
 #define kNoMovieQuotesCellIdentifier      @"NoMovieQuotesCell"
 
+#define kLocalhostTesting                 YES
+#define kLocalhostRpcUrl                  @"http://localhost:20080/_ah/api/rpc?prettyPrint=false"
+
 @interface RHMovieQuotesListViewController_iPhone ()
 @property (nonatomic) BOOL initialQueryComplete;
 @end
@@ -23,10 +26,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
@@ -34,11 +33,16 @@
 - (void) viewWillAppear:(BOOL)animated {
     self.initialQueryComplete = NO;
     // TODO: Query the backend
-    
+    [self _queryForQuotes];
 }
+
 - (GTLServiceMoviequotes*) service {
     if (_service == nil) {
         _service = [[GTLServiceMoviequotes alloc] init];
+        
+        if (kLocalhostTesting) {
+            _service.rpcURL = [NSURL URLWithString:kLocalhostRpcUrl];
+        }
         _service.retryEnabled = YES;
         [GTMHTTPFetcher setLoggingEnabled:YES];
     }
@@ -156,4 +160,45 @@
 
  */
 
+#pragma mark - Endpoints
+
+- (void) _queryForQuotes {
+    // You need the service
+    GTLServiceMoviequotes* service = self.service;
+    // You to make a query object
+    GTLQueryMoviequotes* query = [GTLQueryMoviequotes queryForMoviequoteList];
+    query.limit = 30;
+    query.order = @"-last_touch_date_time";
+    // Execute the query using the service object
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    [service executeQuery:query completionHandler:^(GTLServiceTicket* ticket,
+                                                    GTLMoviequotesMovieQuoteCollection* movieQuotes,
+                                                    NSError* error) {
+        //   Inside the callback block process the result
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        if (error != nil){
+            // Ooops!  There is a problem!
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error while doing a query for quotes."
+                                                            message:error.localizedDescription
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
+        self.quotes = [movieQuotes.items mutableCopy];
+        [self.tableView reloadData];
+        // Optional.
+        if (movieQuotes.nextPageToken != nil) {
+            NSLog(@"Note, there are more quotes on the server.  You could call query again to get more using the page token %@", movieQuotes.nextPageToken);
+        }
+    }];
+}
+
 @end
+
+
+
+
+
+
