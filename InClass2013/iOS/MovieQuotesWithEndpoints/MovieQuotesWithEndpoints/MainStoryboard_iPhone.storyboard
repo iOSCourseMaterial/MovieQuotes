@@ -73,7 +73,13 @@
                             </tableViewCell>
                         </prototypes>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Movie Quotes" id="2XT-Ue-kKa"/>
+                    <navigationItem key="navigationItem" title="Movie Quotes" id="2XT-Ue-kKa">
+                        <barButtonItem key="leftBarButtonItem" systemItem="add" id="Jn9-tt-6HF">
+                            <connections>
+                                <action selector="pressedAdd:" destination="xsA-dP-2QZ" id="TiS-sH-Srn"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dTA-ys-bxU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

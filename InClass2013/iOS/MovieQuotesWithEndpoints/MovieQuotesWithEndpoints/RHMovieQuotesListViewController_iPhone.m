@@ -14,7 +14,7 @@
 #define kLoadingMovieQuotesCellIdentifier @"LoadingMovieQuotesCell"
 #define kNoMovieQuotesCellIdentifier      @"NoMovieQuotesCell"
 
-#define kLocalhostTesting                 YES
+#define kLocalhostTesting                 NO
 #define kLocalhostRpcUrl                  @"http://localhost:20080/_ah/api/rpc?prettyPrint=false"
 
 @interface RHMovieQuotesListViewController_iPhone ()
@@ -23,11 +23,9 @@
 
 @implementation RHMovieQuotesListViewController_iPhone
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -76,6 +74,22 @@
     return _quotes;
 }
 
+- (IBAction) pressedAdd:(id)sender {
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Create a new quote"
+                                                    message:@""
+                                                   delegate:self
+                                          cancelButtonTitle:@"Cancel"
+                                          otherButtonTitles:@"Create quote", nil];
+    
+    [alert setAlertViewStyle:UIAlertViewStyleLoginAndPasswordInput];
+    UITextField* movieTitleTextField = [alert textFieldAtIndex:0];
+    UITextField* quoteTextField = [alert textFieldAtIndex:1];
+    movieTitleTextField.placeholder = @"Movie title";
+    quoteTextField.placeholder = @"Quote";
+    [quoteTextField setSecureTextEntry:NO];
+    [alert show];
+}
+
 
 #pragma mark - Table view data source
 
@@ -109,28 +123,40 @@
     return cell;
 }
 
-/*
+
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the specified item to be editable.
+    if (self.quotes.count == 0) {
+        return NO;
+    }
     return YES;
 }
-*/
 
-/*
+
+
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+        
+        // Fire off a message to remove this quote on the backend
+        
+        GTLMoviequotesMovieQuote* quoteToDelete = self.quotes[indexPath.row];
+        [self _deleteQuote:quoteToDelete.identifier];
+        
+        [self.quotes removeObjectAtIndex:indexPath.row];
+        if (self.quotes.count == 0) {
+            [tableView reloadData];
+        } else {
+            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
+
+    }
 }
-*/
+
 
 /*
 // Override to support rearranging the table view.
@@ -160,12 +186,43 @@
 
  */
 
+#pragma mark - UIAlertViewDelegate
+
+
+// Called when a button is clicked. The view will be automatically dismissed after this call returns
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == alertView.cancelButtonIndex) {
+        NSLog(@"Do nothing.  User hit cancel");
+        return;
+    }
+    
+    NSString* movieTitle = [[alertView textFieldAtIndex:0] text];
+    NSString* quote = [[alertView textFieldAtIndex:1] text];
+    
+    
+    GTLMoviequotesMovieQuote* newQuote = [[GTLMoviequotesMovieQuote alloc] init];
+    newQuote.movieTitle = movieTitle;
+    newQuote.quote = quote;
+    
+    // Add to the top.  ONLY add it locally (which we'll later change).
+    [self.quotes insertObject:newQuote atIndex:0];
+
+    if (self.quotes.count == 1) {
+        [self.tableView reloadData];
+    } else {
+        NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+        [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    
+    [self _insertQuote:newQuote];
+}
+
+
+
 #pragma mark - Endpoints
 
 - (void) _queryForQuotes {
-    // You need the service
     GTLServiceMoviequotes* service = self.service;
-    // You to make a query object
     GTLQueryMoviequotes* query = [GTLQueryMoviequotes queryForMoviequoteList];
     query.limit = 30;
     query.order = @"-last_touch_date_time";
@@ -176,6 +233,7 @@
                                                     NSError* error) {
         //   Inside the callback block process the result
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        self.initialQueryComplete = YES;
         if (error != nil){
             // Ooops!  There is a problem!
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error while doing a query for quotes."
@@ -183,16 +241,53 @@
                                                            delegate:nil
                                                   cancelButtonTitle:@"OK"
                                                   otherButtonTitles:nil];
+            [self.tableView reloadData];
             [alert show];
             return;
         }
         self.quotes = [movieQuotes.items mutableCopy];
-        [self.tableView reloadData];
+
         // Optional.
         if (movieQuotes.nextPageToken != nil) {
             NSLog(@"Note, there are more quotes on the server.  You could call query again to get more using the page token %@", movieQuotes.nextPageToken);
         }
+        
+        [self.tableView reloadData];
     }];
+}
+
+- (void) _insertQuote:(GTLMoviequotesMovieQuote*) newQuote {
+    GTLServiceMoviequotes* service = self.service;
+    GTLQueryMoviequotes* query = [GTLQueryMoviequotes queryForMoviequoteInsertWithObject:newQuote];
+    // TODO: Fix a localhost bug when doing a POST.
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    [service executeQuery:query completionHandler:^(GTLServiceTicket* ticket,
+                                                    GTLMoviequotesMovieQuote* returnedMovieQuote,
+                                                    NSError* error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        if (error != nil) {
+            // Ooops!  There is a problem!
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error while doing an insert."
+                                                            message:error.localizedDescription
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
+        
+        // Update this newQuote with the id of the returnedQuote
+        newQuote.identifier = returnedMovieQuote.identifier;
+        
+        // Optional
+        [self _queryForQuotes];
+        
+    }];
+    
+}
+
+- (void) _deleteQuote:(NSNumber*) idToDelete {
+    // TODO: Implement this function.
 }
 
 @end

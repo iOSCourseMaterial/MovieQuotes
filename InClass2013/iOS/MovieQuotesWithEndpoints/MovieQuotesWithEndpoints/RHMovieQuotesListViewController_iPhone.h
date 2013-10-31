@@ -9,10 +9,11 @@
 #import <UIKit/UIKit.h>
 @class GTLServiceMoviequotes;
 
-@interface RHMovieQuotesListViewController_iPhone : UITableViewController
+@interface RHMovieQuotesListViewController_iPhone : UITableViewController <UIAlertViewDelegate>
 
 
 @property (nonatomic, strong) GTLServiceMoviequotes* service;
 @property (nonatomic, strong) NSMutableArray* quotes;
+- (IBAction)pressedAdd:(id)sender;
 
 @end
