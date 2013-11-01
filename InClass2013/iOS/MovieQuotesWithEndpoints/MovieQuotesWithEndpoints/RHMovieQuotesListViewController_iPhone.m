@@ -14,7 +14,7 @@
 #define kLoadingMovieQuotesCellIdentifier @"LoadingMovieQuotesCell"
 #define kNoMovieQuotesCellIdentifier      @"NoMovieQuotesCell"
 
-#define kLocalhostTesting                 NO
+#define kLocalhostTesting                 YES
 #define kLocalhostRpcUrl                  @"http://localhost:20080/_ah/api/rpc?prettyPrint=false"
 
 @interface RHMovieQuotesListViewController_iPhone ()
@@ -207,12 +207,15 @@
     // Add to the top.  ONLY add it locally (which we'll later change).
     [self.quotes insertObject:newQuote atIndex:0];
 
-    if (self.quotes.count == 1) {
-        [self.tableView reloadData];
-    } else {
-        NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-        [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
+//    if (self.quotes.count == 1) {
+//        [self.tableView reloadData];
+//    } else {
+//        NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+//        [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+//    }
+    
+    [self.tableView reloadData];
+
     
     [self _insertQuote:newQuote];
 }
@@ -259,7 +262,10 @@
 - (void) _insertQuote:(GTLMoviequotesMovieQuote*) newQuote {
     GTLServiceMoviequotes* service = self.service;
     GTLQueryMoviequotes* query = [GTLQueryMoviequotes queryForMoviequoteInsertWithObject:newQuote];
-    // TODO: Fix a localhost bug when doing a POST.
+    // Hack to work around a localhost bug when doing a POST.
+    if (kLocalhostTesting) {
+        query.JSON = newQuote.JSON;
+    }
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     [service executeQuery:query completionHandler:^(GTLServiceTicket* ticket,
                                                     GTLMoviequotesMovieQuote* returnedMovieQuote,
@@ -287,7 +293,32 @@
 }
 
 - (void) _deleteQuote:(NSNumber*) idToDelete {
-    // TODO: Implement this function.
+    GTLServiceMoviequotes* service = self.service;
+    GTLQueryMoviequotes* query = [GTLQueryMoviequotes queryForMoviequoteDeleteWithIdentifier:idToDelete.longLongValue];
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    [service executeQuery:query completionHandler:^(GTLServiceTicket* ticket,
+                                                    GTLMoviequotesMovieQuote* returnedMovieQuote,
+                                                    NSError* error) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        if (error != nil) {
+            // Ooops!  There is a problem!
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error while doing a delete."
+                                                            message:error.localizedDescription
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"OK"
+                                                  otherButtonTitles:nil];
+            [alert show];
+            return;
+        }
+        
+        // Delete worked.  Good for us.  Already done with delete on client.
+        
+        
+        // Optional (very options)
+//        [self _queryForQuotes];
+        
+    }];
 }
 
 @end

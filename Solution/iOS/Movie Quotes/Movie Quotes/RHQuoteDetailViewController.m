@@ -15,8 +15,7 @@
 
 @implementation RHQuoteDetailViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
 }
 
