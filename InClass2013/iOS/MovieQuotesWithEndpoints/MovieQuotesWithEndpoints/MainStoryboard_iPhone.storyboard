@@ -13,11 +13,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MovieQuoteCell" textLabel="j09-uX-o8c" detailTextLabel="YuQ-IW-mrV" style="IBUITableViewCellStyleSubtitle" id="gjb-Rr-xyo">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="MovieQuoteCell" textLabel="j09-uX-o8c" detailTextLabel="YuQ-IW-mrV" style="IBUITableViewCellStyleSubtitle" id="gjb-Rr-xyo">
                                 <rect key="frame" x="0.0" y="86" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gjb-Rr-xyo" id="cNk-vZ-x9U">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="j09-uX-o8c">
@@ -80,10 +80,70 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="OwY-nh-dqm" kind="push" identifier="PushDetailQuoteSegue" id="OX0-4B-a9y"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dTA-ys-bxU" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="356" y="77"/>
+        </scene>
+        <!--Movie Quote Detail View Controller i Phone-->
+        <scene sceneID="NTq-Hw-MYh">
+            <objects>
+                <viewController id="OwY-nh-dqm" customClass="RHMovieQuoteDetailViewController_iPhone" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="7ID-Qz-0g3"/>
+                        <viewControllerLayoutGuide type="bottom" id="CRs-dJ-oNa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="y9t-Ui-mXG">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Og8-NR-qeM">
+                                <rect key="frame" x="20" y="70" width="280" height="94"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="94" id="8XX-83-jm1"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="mZS-Q1-PmO">
+                                <rect key="frame" x="20" y="164" width="280" height="332"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="CRs-dJ-oNa" firstAttribute="top" secondItem="mZS-Q1-PmO" secondAttribute="bottom" constant="72" id="2St-s0-fPS"/>
+                            <constraint firstItem="Og8-NR-qeM" firstAttribute="leading" secondItem="mZS-Q1-PmO" secondAttribute="leading" id="9Yw-Hx-ZIq"/>
+                            <constraint firstItem="Og8-NR-qeM" firstAttribute="trailing" secondItem="mZS-Q1-PmO" secondAttribute="trailing" id="Qmi-jx-abc"/>
+                            <constraint firstItem="mZS-Q1-PmO" firstAttribute="top" secondItem="Og8-NR-qeM" secondAttribute="bottom" id="bgf-kV-AGk"/>
+                            <constraint firstAttribute="trailing" secondItem="Og8-NR-qeM" secondAttribute="trailing" constant="20" symbolic="YES" id="kd3-yi-cNk"/>
+                            <constraint firstItem="Og8-NR-qeM" firstAttribute="leading" secondItem="y9t-Ui-mXG" secondAttribute="leading" constant="20" symbolic="YES" id="lnO-qk-Nq8"/>
+                            <constraint firstItem="Og8-NR-qeM" firstAttribute="top" secondItem="7ID-Qz-0g3" secondAttribute="bottom" constant="6" id="sea-FY-Lsf"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="6w2-0k-RCx">
+                        <barButtonItem key="rightBarButtonItem" title="Edit quote" id="xgM-OY-9mI">
+                            <connections>
+                                <action selector="pressedEditQuote:" destination="OwY-nh-dqm" id="FwW-ji-50R"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="movieTitleTextView" destination="Og8-NR-qeM" id="Mnp-RA-02P"/>
+                        <outlet property="quoteTextView" destination="mZS-Q1-PmO" id="xrf-tW-d7f"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="x9S-W9-h0g" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="801" y="77"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ndS-ua-QCW">

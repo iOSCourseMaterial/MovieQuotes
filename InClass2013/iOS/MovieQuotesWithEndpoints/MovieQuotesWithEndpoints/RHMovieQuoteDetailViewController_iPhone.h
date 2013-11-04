@@ -7,7 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+@class GTLMoviequotesMovieQuote;
+@class GTLServiceMoviequotes;
 
-@interface RHMovieQuoteDetailViewController_iPhone : UIViewController
+#define kLocalhostTesting                 YES
+
+@interface RHMovieQuoteDetailViewController_iPhone : UIViewController <UIAlertViewDelegate>
+
+@property (nonatomic, strong) GTLServiceMoviequotes* service;
+@property (strong, nonatomic) GTLMoviequotesMovieQuote* movieQuote;
+
+@property (strong, nonatomic) IBOutlet UITextView *movieTitleTextView;
+@property (strong, nonatomic) IBOutlet UITextView *quoteTextView;
+
+- (IBAction)pressedEditQuote:(id)sender;
+
 
 @end

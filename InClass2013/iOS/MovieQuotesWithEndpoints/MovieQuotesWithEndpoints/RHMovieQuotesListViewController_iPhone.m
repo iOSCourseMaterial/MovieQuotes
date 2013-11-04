@@ -7,6 +7,7 @@
 //
 
 #import "RHMovieQuotesListViewController_iPhone.h"
+#import "RHMovieQuoteDetailViewController_iPhone.h"
 #import "GTLMoviequotes.h"
 #import "GTMHTTPFetcherLogging.h"
 
@@ -14,7 +15,9 @@
 #define kLoadingMovieQuotesCellIdentifier @"LoadingMovieQuotesCell"
 #define kNoMovieQuotesCellIdentifier      @"NoMovieQuotesCell"
 
-#define kLocalhostTesting                 YES
+#define kPushDetailQuoteSegue @"PushDetailQuoteSegue"
+
+
 #define kLocalhostRpcUrl                  @"http://localhost:20080/_ah/api/rpc?prettyPrint=false"
 
 @interface RHMovieQuotesListViewController_iPhone ()
@@ -150,6 +153,7 @@
         [self.quotes removeObjectAtIndex:indexPath.row];
         if (self.quotes.count == 0) {
             [tableView reloadData];
+            [self setEditing:NO animated:YES];  // Nothing more to delete so end editing mode.
         } else {
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
@@ -158,33 +162,25 @@
 }
 
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.quotes.count == 0) {
+        return;
+    }
+    GTLMoviequotesMovieQuote* quoteSelected = self.quotes[indexPath.row];
+    [self performSegueWithIdentifier:kPushDetailQuoteSegue sender:quoteSelected];
 }
-*/
 
-/*
 #pragma mark - Navigation
 
 // In a story board-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:kPushDetailQuoteSegue]) {
+        RHMovieQuoteDetailViewController_iPhone* destination = segue.destinationViewController;
+        destination.movieQuote = sender;
+        destination.service = self.service;
+    }
 }
-
- */
 
 #pragma mark - UIAlertViewDelegate
 
@@ -203,20 +199,23 @@
     GTLMoviequotesMovieQuote* newQuote = [[GTLMoviequotesMovieQuote alloc] init];
     newQuote.movieTitle = movieTitle;
     newQuote.quote = quote;
-    
-    // Add to the top.  ONLY add it locally (which we'll later change).
+
     [self.quotes insertObject:newQuote atIndex:0];
 
-//    if (self.quotes.count == 1) {
-//        [self.tableView reloadData];
-//    } else {
-//        NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-//        [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-//    }
-    
-    [self.tableView reloadData];
-
-    
+    if (kLocalhostTesting) {
+        // This is an optional change.  Turns out localhost testing is too fast and the insert can finish
+        // and a query can finish before the animaiton finishes.  So for localhost testing don't ever do
+        // and animation.  Just do a reload and that will avoid the race condition.
+        [self.tableView reloadData];
+    } else {
+        // Use the fancy insert animation with the deployed version.
+        if (self.quotes.count == 1) {
+            [self.tableView reloadData];
+        } else {
+            NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+            [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+    }
     [self _insertQuote:newQuote];
 }
 

@@ -111,6 +111,7 @@
         [self.movieQuotes removeObjectAtIndex:indexPath.row];
         if (self.movieQuotes.count == 0) {
             [tableView reloadData];
+            [self setEditing:NO animated:YES];
         } else {
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }
@@ -145,6 +146,7 @@
     // Temporary hacky fix to an annoying gzip bug.
     if (LOCAL_HOST_TESTING) {
         [query setJSON:gtlMovieQuote.JSON];
+        query.bodyObject = nil;
     }
     
     NSLog(@"Sending...");
@@ -207,7 +209,7 @@
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         if (error == nil) {
             NSLog(@"Delete completed on the backend");
-            [self _queryForQuotes];
+            //[self _queryForQuotes];
         } else {
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Error during delete"
                                                             message:error.localizedDescription
@@ -238,12 +240,22 @@
         newQuote.movieTitle = [[alertView textFieldAtIndex:0] text];
         newQuote.quote = [[alertView textFieldAtIndex:1] text];
         [self.movieQuotes insertObject:newQuote atIndex:0];
-        if (self.movieQuotes.count == 1) {
+
+        if (LOCAL_HOST_TESTING) {
+            // This is an optional change.  Turns out localhost testing is too fast and the insert can finish
+            // and a query can finish before the animaiton finishes.  So for localhost testing don't ever do
+            // and animation.  Just do a reload and that will avoid the race condition.
             [self.tableView reloadData];
         } else {
-            NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
-            [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            // Use the fancy insert animation with the deployed version.
+            if (self.movieQuotes.count == 1) {
+                [self.tableView reloadData];
+            } else {
+                NSIndexPath* newIndexPath = [NSIndexPath indexPathForRow:0 inSection:0];
+                [self.tableView insertRowsAtIndexPaths:@[newIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            }
         }
+
         [self _insertQuote:newQuote];
     }
 }
