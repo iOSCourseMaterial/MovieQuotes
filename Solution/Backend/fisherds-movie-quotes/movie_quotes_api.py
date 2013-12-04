@@ -1,7 +1,7 @@
 """ Movie quotes API"""
 
 
-from google.appengine.ext import endpoints
+import endpoints
 from protorpc import remote
 
 from models import MovieQuote
