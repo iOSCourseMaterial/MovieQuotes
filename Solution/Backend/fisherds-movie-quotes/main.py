@@ -18,6 +18,7 @@ import webapp2
 
 from google.appengine.ext.webapp import template
 from models import MovieQuote
+import time
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -27,6 +28,7 @@ class MainHandler(webapp2.RequestHandler):
     def post(self):
         new_quote = MovieQuote(movie_title = self.request.get('movie_title'), quote = self.request.get('quote'))
         new_quote.put()
+        time.sleep(0.5)
         self.redirect('/')
 
 app = webapp2.WSGIApplication([

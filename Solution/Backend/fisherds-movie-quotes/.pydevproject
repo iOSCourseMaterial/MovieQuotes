@@ -4,10 +4,10 @@
 <pydev_project>
 <pydev_variables_property name="org.python.pydev.PROJECT_VARIABLE_SUBSTITUTION">
 <key>GOOGLE_APP_ENGINE</key>
-<value>/Applications/GoogleAppEngineLauncher.app/Contents/Resources/GoogleAppEngine-default.bundle/Contents/Resources/google_appengine</value>
+<value>/usr/local/google_appengine</value>
 </pydev_variables_property>
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
-<path>/${PROJECT_DIR_NAME}</path>
+<path>MovieQuotesBackend</path>
 </pydev_pathproperty>
 <pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
 <path>${GOOGLE_APP_ENGINE}</path>
@@ -20,6 +20,7 @@
 <path>${GOOGLE_APP_ENGINE}/lib/django-1.3</path>
 <path>${GOOGLE_APP_ENGINE}/lib/django-1.4</path>
 <path>${GOOGLE_APP_ENGINE}/lib/django-1.5</path>
+<path>${GOOGLE_APP_ENGINE}/lib/endpoints-1.0</path>
 <path>${GOOGLE_APP_ENGINE}/lib/enum</path>
 <path>${GOOGLE_APP_ENGINE}/lib/fancy_urllib</path>
 <path>${GOOGLE_APP_ENGINE}/lib/google-api-python-client</path>
@@ -31,7 +32,7 @@
 <path>${GOOGLE_APP_ENGINE}/lib/markupsafe-0.15</path>
 <path>${GOOGLE_APP_ENGINE}/lib/oauth2</path>
 <path>${GOOGLE_APP_ENGINE}/lib/prettytable</path>
-<path>${GOOGLE_APP_ENGINE}/lib/protorpc</path>
+<path>${GOOGLE_APP_ENGINE}/lib/protorpc-1.0</path>
 <path>${GOOGLE_APP_ENGINE}/lib/python-gflags/tests</path>
 <path>${GOOGLE_APP_ENGINE}/lib/setuptools-0.6c11</path>
 <path>${GOOGLE_APP_ENGINE}/lib/simplejson</path>

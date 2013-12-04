@@ -29,12 +29,38 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.rightBarButtonItem = self.editButtonItem;
+
+
+
+
+    // TODO: Remove this testing area.
+
+
+    GTLMoviequotesMovieQuote* mq = [[GTLMoviequotesMovieQuote alloc] init];
+    mq.movieTitle = @"My title";
+    mq.quote = @"My quote";
+    NSLog(@"Original quote = %@", mq);
+    NSLog(@"mq.movieTitle = %@", mq.movieTitle);
+    NSLog(@"mq.quote = %@", mq.quote);
+
+
+    // Convert to a string.
+    NSString* mqStr = mq.JSONString;
+
+
+    // Covert that string back to an object.
+    NSError* error;
+    GTLMoviequotesMovieQuote* backToQuote = [GTLMoviequotesMovieQuote objectWithJSON:[GTLJSONParser objectWithString:mqStr error:&error]];
+
+    NSLog(@"Back to quote = %@", backToQuote);
+    NSLog(@"backToQuote.movieTitle = %@", backToQuote.movieTitle);
+    NSLog(@"backToQuote.quote = %@", backToQuote.quote);
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     self.initialQueryComplete = NO;
     // TODO: Query the backend
-    [self _queryForQuotes];
+    //[self _queryForQuotes];
 }
 
 - (GTLServiceMoviequotes*) service {

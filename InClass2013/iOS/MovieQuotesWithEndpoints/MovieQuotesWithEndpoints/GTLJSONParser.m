@@ -123,12 +123,14 @@
 #else
   Class serializer = NSClassFromString(@"NSJSONSerialization");
   if (serializer) {
+      NSLog(@"Using option 1");
     const NSUInteger kOpts = (1UL << 0); // NSJSONReadingMutableContainers
     NSMutableDictionary *obj = [serializer JSONObjectWithData:jsonData
                                                       options:kOpts
                                                         error:error];
     return obj;
   } else {
+      NSLog(@"Using option 2");
     Class jsonParseClass = NSClassFromString(@"SBJsonParser");
     if (!jsonParseClass) {
       jsonParseClass = NSClassFromString(@"SBJSON");
