@@ -1,16 +1,19 @@
 body {
-	background: url('../images/noise.jpg');
-	font: 14px Helvetica, serif;
+	background-color: #f5f5f5;
 }
 
-input[name=quote] {
-	width: 300px;
+.row {
+	margin-left: 0px;
+	margin-top: 10px;
+	overflow: scroll;
 }
 
-ul {
-    list-style-type: none;
+.input-group-addon {
+	width: 100px;
+	text-alignment: left;
 }
 
-.movie-title {
-	font-style: italic;
+#movie_title, 
+#quote {
+	width: 440px;
 }

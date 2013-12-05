@@ -17,6 +17,11 @@ handlers:
 - url: /_ah/spi/.*
   script: movie_quotes_api.app
 
+# JavaScript Ajax web client
+- url: /
+  static_files: static/index.html
+  upload: static/index\.html
+
 # Main handler
 - url: .*
   script: main.app
