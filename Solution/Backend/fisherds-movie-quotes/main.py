@@ -15,20 +15,28 @@
 # limitations under the License.
 #
 import webapp2
-
-from google.appengine.ext.webapp import template
-from models import MovieQuote
+import jinja2
+import os
 import time
+
+from models import MovieQuote
+
+
+jinja_env = jinja2.Environment(
+    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+    extensions=['jinja2.ext.autoescape'],
+    autoescape=True)
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         moviequotes = MovieQuote.query().order(-MovieQuote.last_touch_date_time).fetch(30)
-        self.response.out.write(template.render('templates/moviequotes.html', {'moviequotes': moviequotes}))
+        template = jinja_env.get_template('templates/moviequotes.html')
+        self.response.out.write(template.render({'moviequotes': moviequotes}))
 
     def post(self):
         new_quote = MovieQuote(movie_title = self.request.get('movie_title'), quote = self.request.get('quote'))
         new_quote.put()
-        time.sleep(0.5)
+        time.sleep(0.25)
         self.redirect('/')
 
 app = webapp2.WSGIApplication([

@@ -9,22 +9,22 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
-- url: /stylesheets
-  static_dir: stylesheets
+# Serving static files (css, images, etc)
+- url: /static
+  static_dir: static
 
-- url: /images
-  static_dir: images
-
-#Endpoints handler
+# Endpoints handler
 - url: /_ah/spi/.*
-  script: movie_quotes_api.APPLICATION
+  script: movie_quotes_api.app
 
-#Main handler
+# Main handler
 - url: .*
   script: main.app
 
 libraries:
 - name: webapp2
-  version: "2.5.2"
+  version: latest
+- name: jinja2
+  version: latest
 - name: endpoints
   version: latest
