@@ -29,9 +29,9 @@ warnings.simplefilter('default')  # To allow DeprecationWarning
 from . import utils as ndb_utils
 from .. import utils
 
-from protorpc import messages
+import endpoints
 
-from google.appengine.ext import endpoints
+from protorpc import messages
 from google.appengine.ext import ndb
 
 
@@ -552,4 +552,5 @@ class EndpointsComputedProperty(ndb.ComputedProperty):
     to be able to call entity.some_computed_property_name = some_value without
     halting code, hence this will simply do nothing.
     """
-    warnings.warn('Cannot assign to a ComputedProperty.', DeprecationWarning)
+    pass  # suppress the warning since this happens when we copy entities
+    #warnings.warn('Cannot assign to a ComputedProperty.', DeprecationWarning)

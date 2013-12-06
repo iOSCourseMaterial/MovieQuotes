@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Movie Quotes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/static/js/base.js"></script>
@@ -11,8 +12,7 @@
 </head>
 <body>
 
-<header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav"
-	role="banner">
+<header class="navbar navbar-inverse navbar-fixed-top bs-docs-nav" role="banner">
 	<div class="container">
 		<div class="navbar-header">
 			<button class="navbar-toggle" type="button" data-toggle="collapse"
@@ -35,29 +35,37 @@
 		</nav>
 	</div>
 </header>
-<div class="container">
-		<div id="outputLog"></div>
+	<div class="container">
+		<div class="jumbotron">
+			<ul id="outputLog" class="list-group">
+			</ul>
+		</div>
 		<!-- Modal -->
-		<div id='add-quote-modal' class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div id='add-quote-modal' class="modal fade" id="myModal"
+			tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+			aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabel">Add a movie quote</h4>
 					</div>
 					<div class="modal-body">
 						<div class="input-group">
-							<span class="input-group-addon">Movie Title: </span>
-							<input id="movie_title" type="text" class="form-control" placeholder="title">
+							<span class="input-group-addon">Movie Title: </span> <input
+								id="movie_title" type="text" class="form-control"
+								placeholder="title">
 						</div>
 						<div class="input-group">
-							<span class="input-group-addon">Quote: </span>
-							<input id="quote" type="text" class="form-control" placeholder="quote">
+							<span class="input-group-addon">Quote: </span> <input id="quote"
+								type="text" class="form-control" placeholder="quote">
 						</div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-						<button id="add-quote-button" type="button" class="btn btn-primary">Add Quote</button>
+						<button id="add-quote-button" type="button"
+							class="btn btn-primary">Add Quote</button>
 					</div>
 				</div>
 				<!-- /.modal-content -->
@@ -68,11 +76,11 @@
 
 		<script type="text/javascript">
         function init() {
-            rh.moviequotes.init('//' + window.location.host + '/_ah/api');
+        	rh.moviequotes.init('//' + window.location.host + '/_ah/api');
         }
     </script>
-    <script src="https://apis.google.com/js/client.js?onload=init"></script>
-</div>
+		<script src="https://apis.google.com/js/client.js?onload=init"></script>
+	</div>
 
 
 </body>

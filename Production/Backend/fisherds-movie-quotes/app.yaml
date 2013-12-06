@@ -17,13 +17,15 @@ handlers:
 - url: /_ah/spi/.*
   script: movie_quotes_api.app
 
+
 # JavaScript Ajax web client
-- url: /
+- url: /bootstrap\.html
   static_files: static/index.html
   upload: static/index\.html
+  secure: always
 
 # Main handler
-- url: .*
+- url: /.*
   script: main.app
 
 libraries:

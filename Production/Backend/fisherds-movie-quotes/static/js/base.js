@@ -15,10 +15,17 @@ rh.moviequotes = rh.moviequotes || {};
  * param {Object} movieQuote MovieQuote to print.
  */
 rh.moviequotes.print = function(movieQuote) {
-  var element = document.createElement('div');
-  element.classList.add('row');
-  element.innerHTML = movieQuote.movie_title + " " + movieQuote.quote;
-  document.getElementById('outputLog').appendChild(element);
+  var movieQuoteEl = document.createElement('li');
+  movieQuoteEl.classList.add('list-group-item');
+  var titleEl = document.createElement('h2');
+  titleEl.classList.add('list-group-item-heading');
+  titleEl.innerHTML = movieQuote.movie_title;
+  var quoteEl = document.createElement('p');
+  quoteEl.classList.add('list-group-item-text');
+  quoteEl.innerHTML = movieQuote.quote;
+  movieQuoteEl.appendChild(titleEl);
+  movieQuoteEl.appendChild(quoteEl);
+  document.getElementById('outputLog').appendChild(movieQuoteEl);
 };
 
 
@@ -26,10 +33,10 @@ rh.moviequotes.print = function(movieQuote) {
  * Lists MovieQuotes via the API.
  */
 rh.moviequotes.listMovieQuotes = function() {
-	document.getElementById('outputLog').innerHTML = '';
   gapi.client.moviequotes.quote.list().execute(
       function(resp) {
         if (!resp.code) {
+          document.getElementById('outputLog').innerHTML = '';
           resp.items = resp.items || [];
           for (var i = 0; i < resp.items.length; i++) {
             rh.moviequotes.print(resp.items[i]);
@@ -64,6 +71,8 @@ rh.moviequotes.insertMovieQuote = function(movieTitle, quote) {
 rh.moviequotes.enableButtons = function() {
   document.getElementById('display-add-quote-modal').onclick = function() {
 	  console.log("Show the modal");
+	  document.getElementById('movie_title').value = '';
+      document.getElementById('quote').value = '';
 	  $('#add-quote-modal').modal('show');
   }
 
