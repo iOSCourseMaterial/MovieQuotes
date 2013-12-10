@@ -15,17 +15,34 @@ rh.moviequotes = rh.moviequotes || {};
  * param {Object} movieQuote MovieQuote to print.
  */
 rh.moviequotes.print = function(movieQuote) {
-  var movieQuoteEl = document.createElement('li');
-  movieQuoteEl.classList.add('list-group-item');
-  var titleEl = document.createElement('h2');
-  titleEl.classList.add('list-group-item-heading');
-  titleEl.innerHTML = movieQuote.movie_title;
-  var quoteEl = document.createElement('p');
-  quoteEl.classList.add('list-group-item-text');
-  quoteEl.innerHTML = movieQuote.quote;
-  movieQuoteEl.appendChild(titleEl);
-  movieQuoteEl.appendChild(quoteEl);
-  document.getElementById('outputLog').appendChild(movieQuoteEl);
+////  var movieQuoteEl = document.createElement('li');
+//	$movieQuoteEl = $('<li></li>');
+////  movieQuoteEl.classList.add('list-group-item');
+//	$movieQuoteEl.addClass('list-group-item');
+////  var titleEl = document.createElement('h2');
+//	$titleEl = $('<h2></h2>');
+////  titleEl.classList.add('list-group-item-heading');
+//	$titleEl.addClass('list-group-item-heading');
+////  titleEl.innerHTML = movieQuote.movie_title;
+//	$titleEl.html(movieQuote.movie_title);
+////  var quoteEl = document.createElement('p');
+//	$quoteEl = $('<p></p>');
+////  quoteEl.classList.add('list-group-item-text');
+//	$quoteEl.addClass('list-group-item-text');
+////  quoteEl.innerHTML = movieQuote.quote;
+//	$quoteEl.html(movieQuote.quote);
+////  movieQuoteEl.appendChild(titleEl);
+//	$movieQuoteEl.append($titleEl);
+////  movieQuoteEl.appendChild(quoteEl);
+//	$movieQuoteEl.append($quoteEl);
+////  document.getElementById('outputLog').appendChild(movieQuoteEl);
+//	$('#outputLog').append($movieQuoteEl);
+	
+
+	$titleEl = $('<h2></h2>').addClass('list-group-item-heading').html(movieQuote.movie_title);
+	$quoteEl = $('<p></p>').addClass('list-group-item-text').html(movieQuote.quote);
+	$movieQuoteEl = $('<li></li>').addClass('list-group-item').append($titleEl).append($quoteEl);
+	$('#outputLog').prepend($movieQuoteEl);
 };
 
 
@@ -33,10 +50,10 @@ rh.moviequotes.print = function(movieQuote) {
  * Lists MovieQuotes via the API.
  */
 rh.moviequotes.listMovieQuotes = function() {
-  gapi.client.moviequotes.quote.list().execute(
+  gapi.client.moviequotes.quote.list({'order': 'last_touch_date_time'}).execute(
       function(resp) {
         if (!resp.code) {
-          document.getElementById('outputLog').innerHTML = '';
+        	$('#outputLog').html('');
           resp.items = resp.items || [];
           for (var i = 0; i < resp.items.length; i++) {
             rh.moviequotes.print(resp.items[i]);
@@ -52,7 +69,6 @@ rh.moviequotes.listMovieQuotes = function() {
  * @param {string} quote Quote from the movie.
  */
 rh.moviequotes.insertMovieQuote = function(movieTitle, quote) {
-	console.log("Insert a movie quote");
   gapi.client.moviequotes.quote.insert({
       'movie_title': movieTitle,
       'quote': quote
@@ -69,22 +85,23 @@ rh.moviequotes.insertMovieQuote = function(movieTitle, quote) {
  * Enables the button callbacks in the UI.
  */
 rh.moviequotes.enableButtons = function() {
-  document.getElementById('display-add-quote-modal').onclick = function() {
-	  console.log("Show the modal");
-	  document.getElementById('movie_title').value = '';
-      document.getElementById('quote').value = '';
+  $('#display-add-quote-modal').click(function() {
+	  $('#movie_title').val('');
+//	  document.getElementById('movie_title').value = '';
+//      document.getElementById('quote').value = '';
+	  $('#quote').val('');
 	  $('#add-quote-modal').modal('show');
-  }
+  });
 
-  document.getElementById('refresh-button').onclick = function() {
-    rh.moviequotes.listMovieQuotes()();
-  }
+  $('#refresh-button').click(rh.moviequotes.listMovieQuotes);
 
-  document.getElementById('add-quote-button').onclick = function() {
+  $('#add-quote-button').click(function() {
     rh.moviequotes.insertMovieQuote(
-        document.getElementById('movie_title').value,
-        document.getElementById('quote').value);
-  }
+    		  $('#movie_title').val(),
+    		  $('#quote').val());
+//        document.getElementById('movie_title').value,
+//        document.getElementById('quote').value);
+  });
 };
 
 /**
@@ -101,7 +118,6 @@ rh.moviequotes.init = function(apiRoot) {
       rh.moviequotes.listMovieQuotes();
     }
   }
-
   apisToLoad = 1; // must match number of calls to gapi.client.load()
   gapi.client.load('moviequotes', 'v1', callback, apiRoot);
 };

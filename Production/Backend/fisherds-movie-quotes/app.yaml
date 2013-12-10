@@ -20,8 +20,8 @@ handlers:
 
 # JavaScript Ajax web client
 - url: /bootstrap\.html
-  static_files: static/index.html
-  upload: static/index\.html
+  static_files: static/bootstrap.html
+  upload: static/bootstrap\.html
   secure: always
 
 # Main handler
