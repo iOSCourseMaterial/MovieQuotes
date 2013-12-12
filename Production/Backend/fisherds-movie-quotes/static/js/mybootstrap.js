@@ -88,7 +88,7 @@ rh.moviequotes.enableButtons = function() {
   $('#display-add-quote-modal').click(function() {
 	  $('#movie_title').val('');
 //	  document.getElementById('movie_title').value = '';
-//      document.getElementById('quote').value = '';
+//    document.getElementById('quote').value = '';
 	  $('#quote').val('');
 	  $('#add-quote-modal').modal('show');
   });
@@ -97,10 +97,10 @@ rh.moviequotes.enableButtons = function() {
 
   $('#add-quote-button').click(function() {
     rh.moviequotes.insertMovieQuote(
-    		  $('#movie_title').val(),
-    		  $('#quote').val());
 //        document.getElementById('movie_title').value,
 //        document.getElementById('quote').value);
+  		  $('#movie_title').val(),
+		  $('#quote').val());
   });
 };
 
