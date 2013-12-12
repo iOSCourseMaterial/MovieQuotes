@@ -9,47 +9,138 @@
 /** namespace. */
 var rh = rh || {};
 rh.moviequotes = rh.moviequotes || {};
+rh.moviequotes.endpoints = rh.moviequotes.endpoints || {};
+
+/**
+ * @param {bool} Tracks the editing status.
+ */
+rh.moviequotes.editEnabled = false;
 
 /**
  * Prints a movie quote to the log.
  * param {Object} movieQuote MovieQuote to print.
  */
 rh.moviequotes.print = function(movieQuote) {
-////  var movieQuoteEl = document.createElement('li');
-//	$movieQuoteEl = $('<li></li>');
-////  movieQuoteEl.classList.add('list-group-item');
-//	$movieQuoteEl.addClass('list-group-item');
-////  var titleEl = document.createElement('h2');
-//	$titleEl = $('<h2></h2>');
-////  titleEl.classList.add('list-group-item-heading');
-//	$titleEl.addClass('list-group-item-heading');
-////  titleEl.innerHTML = movieQuote.movie_title;
-//	$titleEl.html(movieQuote.movie_title);
-////  var quoteEl = document.createElement('p');
-//	$quoteEl = $('<p></p>');
-////  quoteEl.classList.add('list-group-item-text');
-//	$quoteEl.addClass('list-group-item-text');
-////  quoteEl.innerHTML = movieQuote.quote;
-//	$quoteEl.html(movieQuote.quote);
-////  movieQuoteEl.appendChild(titleEl);
-//	$movieQuoteEl.append($titleEl);
-////  movieQuoteEl.appendChild(quoteEl);
-//	$movieQuoteEl.append($quoteEl);
-////  document.getElementById('outputLog').appendChild(movieQuoteEl);
-//	$('#outputLog').append($movieQuoteEl);
-	
-
 	$titleEl = $('<h2></h2>').addClass('list-group-item-heading').html(movieQuote.movie_title);
 	$quoteEl = $('<p></p>').addClass('list-group-item-text').html(movieQuote.quote);
-	$movieQuoteEl = $('<li></li>').addClass('list-group-item').append($titleEl).append($quoteEl);
+	$quoteInfo = $('<div class="quote-info"></div>').append($titleEl).append($quoteEl);
+
+	$buttonGroup = $('<div class="row-buttons"></div>');
+	$buttonGroup.append('<button class = "btn btn-success individual-edit-button">Edit</button>');
+	$buttonGroup.append('<button class = "btn btn-danger individual-delete-button">Delete</button>');
+	
+	if (rh.moviequotes.editEnabled) {
+		$quoteInfo.addClass('narrow-for-edit');
+	} else {
+		$buttonGroup.hide();
+	}
+	$movieQuoteEl = $('<li></li>').attr('id', movieQuote.id).addClass('list-group-item').append($quoteInfo).append($buttonGroup);
 	$('#outputLog').prepend($movieQuoteEl);
 };
 
 
+
+/**
+ * Shows or hides the edit and delete buttons.
+ */
+rh.moviequotes.toggleEdit = function() {
+	if (rh.moviequotes.editEnabled) {
+		rh.moviequotes.editEnabled = false;
+		$('#toggle-edit-mode-button').html("Edit");
+		$('.row-buttons').fadeOut('fast');
+		$('.quote-info').removeClass('narrow-for-edit');
+	} else {
+		rh.moviequotes.editEnabled = true;
+		$('#toggle-edit-mode-button').html("Done");
+		console.log("change to done");
+		$('.row-buttons').fadeIn('fast');
+		$('.quote-info').addClass('narrow-for-edit');
+	}
+}
+
+
+
+/**
+ * 
+ */
+rh.moviequotes.deleteQuote = function ($deleteButton) {
+	var quoteId = 0;
+	var $parent = null;
+	var parentEls = $deleteButton.parents();
+	for (var i = 0; i < parentEls.length; i++) {
+		$parent = $(parentEls[i]);
+		if ($parent.hasClass('list-group-item')) {
+			quoteId = $parent.attr('id');
+			break;
+		}
+	}
+	if (quoteId != 0) {
+		rh.moviequotes.endpoints.deleteMovieQuote(quoteId, $parent);
+	}
+}
+		
+/**
+ * Enables the button callbacks in the UI.
+ */
+rh.moviequotes.enableButtons = function() {
+  $('#display-add-quote-modal').click(function() {
+	  $('#movie_title').val('');
+	  $('#quote').val('');
+	  $('#add-quote-modal').modal('show');
+  });
+
+  $('#refresh-button').click( function() {
+	  if (rh.moviequotes.editEnabled) {
+		  rh.moviequotes.toggleEdit();
+	  }
+	  rh.moviequotes.endpoints.listMovieQuotes();
+  });
+
+  $('#add-quote-button').click(function() {
+    rh.moviequotes.endpoints.insertMovieQuote(
+  		  $('#movie_title').val(),
+		  $('#quote').val());
+  });
+  
+  $('#toggle-edit-mode-button').click( function() {
+	 rh.moviequotes.toggleEdit(); 
+  });
+  
+  $('#outputLog').on('click', '.individual-edit-button', function() {
+	  rh.moviequotes.editQuote($(this));
+  });
+  
+  $('#outputLog').on('click', '.individual-delete-button', function() {
+	  rh.moviequotes.deleteQuote($(this));
+  });
+  
+};
+
+/**
+ * Initializes the application.
+ * @param {string} apiRoot Root of the API's path.
+ */
+rh.moviequotes.init = function(apiRoot) {
+	console.log("init called");
+  var apisToLoad;
+  var callback = function() {
+	  console.log("Loaded an api");
+    if (--apisToLoad == 0) {
+      rh.moviequotes.enableButtons();
+      rh.moviequotes.endpoints.listMovieQuotes();
+    }
+  }
+  apisToLoad = 1; // must match number of calls to gapi.client.load()
+  gapi.client.load('moviequotes', 'v1', callback, apiRoot);
+};
+
+
+// ----------------------- Endpoints methods -----------------------
+
 /**
  * Lists MovieQuotes via the API.
  */
-rh.moviequotes.listMovieQuotes = function() {
+rh.moviequotes.endpoints.listMovieQuotes = function() {
   gapi.client.moviequotes.quote.list({'order': 'last_touch_date_time'}).execute(
       function(resp) {
         if (!resp.code) {
@@ -68,11 +159,15 @@ rh.moviequotes.listMovieQuotes = function() {
  * @param {string} movieTitle Title of the movie for the quote
  * @param {string} quote Quote from the movie.
  */
-rh.moviequotes.insertMovieQuote = function(movieTitle, quote) {
-  gapi.client.moviequotes.quote.insert({
-      'movie_title': movieTitle,
-      'quote': quote
-    }).execute(function(resp) {
+rh.moviequotes.endpoints.insertMovieQuote = function(movieTitle, quote, existingId) {
+  var postJson = {
+	      'movie_title': movieTitle,
+	      'quote': quote
+	    };
+  if (existingId) {
+	  postJson.id = existingId
+  }
+  gapi.client.moviequotes.quote.insert(postJson).execute(function(resp) {
       if (!resp.code) {
         rh.moviequotes.print(resp);
       }
@@ -80,40 +175,17 @@ rh.moviequotes.insertMovieQuote = function(movieTitle, quote) {
   $('#add-quote-modal').modal('hide');
 };
 
-
 /**
- * Enables the button callbacks in the UI.
+ * Delete a movie quote
+ * @param {int} id Id of the movieQuote to delete
  */
-rh.moviequotes.enableButtons = function() {
-  $('#display-add-quote-modal').click(function() {
-	  $('#movie_title').val('');
-	  $('#quote').val('');
-	  $('#add-quote-modal').modal('show');
-  });
-
-  $('#refresh-button').click(rh.moviequotes.listMovieQuotes);
-
-  $('#add-quote-button').click(function() {
-    rh.moviequotes.insertMovieQuote(
-  		  $('#movie_title').val(),
-		  $('#quote').val());
-  });
-};
-
-/**
- * Initializes the application.
- * @param {string} apiRoot Root of the API's path.
- */
-rh.moviequotes.init = function(apiRoot) {
-	console.log("init called");
-  var apisToLoad;
-  var callback = function() {
-	  console.log("Loaded an api");
-    if (--apisToLoad == 0) {
-      rh.moviequotes.enableButtons();
-      rh.moviequotes.listMovieQuotes();
-    }
-  }
-  apisToLoad = 1; // must match number of calls to gapi.client.load()
-  gapi.client.load('moviequotes', 'v1', callback, apiRoot);
+rh.moviequotes.endpoints.deleteMovieQuote = function(movieQuoteId, $row) {
+  gapi.client.moviequotes.quote.delete({
+      'id': movieQuoteId
+    }).execute(function(resp) {
+      if (!resp.code) {
+    	  console.log("Deleted now remove from DOM");
+    	  $row.slideUp();
+      }
+    });
 };
