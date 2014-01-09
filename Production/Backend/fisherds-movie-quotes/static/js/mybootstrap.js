@@ -10,6 +10,11 @@ var rh = rh || {};
 rh.moviequotes = rh.moviequotes || {};
 rh.moviequotes.endpoints = rh.moviequotes.endpoints || {};
 
+/**
+ * @param {Object} Map of IDs to movieQuotes.
+ */
+rh.moviequotes.quotes = {}
+
 
 /**
  * @param {bool} Tracks the editing status.
@@ -18,10 +23,11 @@ rh.moviequotes.editEnabled = false;
 
 
 /**
- * @param {number} N
+ * @param {number} Constant for when to ID is selected.
  * @const
  */
 rh.moviequotes.NO_ID_SELECTED = -1;
+
 
 /**
  * @param {number} Tracks the editing status.
@@ -71,15 +77,13 @@ rh.moviequotes.toggleEdit = function() {
 	}
 }
 
-
-
 /**
- * 
+ * Finds the ID for the MovieQuote using the list-group-item's id attribute.
  */
-rh.moviequotes.deleteQuote = function ($deleteButton) {
+rh.moviequotes.getQuoteId = function($rowButton) {
 	var quoteId = 0;
 	var $parent = null;
-	var parentEls = $deleteButton.parents();
+	var parentEls = $rowButton.parents();
 	for (var i = 0; i < parentEls.length; i++) {
 		$parent = $(parentEls[i]);
 		if ($parent.hasClass('list-group-item')) {
@@ -87,16 +91,38 @@ rh.moviequotes.deleteQuote = function ($deleteButton) {
 			break;
 		}
 	}
+	return quoteId;
+}
+
+/**
+ * Deletes the MovieQuote for this row.
+ */
+rh.moviequotes.deleteQuote = function ($deleteButton) {
+	var quoteId = rh.moviequotes.getQuoteId($deleteButton);
 	if (quoteId != 0) {
-		rh.moviequotes.endpoints.deleteMovieQuote(quoteId, $parent);
+		rh.moviequotes.endpoints.deleteMovieQuote(quoteId);
 	}
 }
-		
+
+
+/**
+ * Edits the MovieQuote for this row.
+ */
+rh.moviequotes.editQuote = function ($editButton) {
+	
+
+}
+
+
+
 /**
  * Enables the button callbacks in the UI.
  */
 rh.moviequotes.enableButtons = function() {
   $('#display-add-quote-modal').click(function() {
+	  $('#myModalLabel').html('Add a movie quote');
+	  $('#add-quote-button').html("Add Quote");
+	  rh.moviequotes.selectedId = rh.moviequotes.NO_ID_SELECTED;
 	  $('#movie_title').val('');
 	  $('#quote').val('');
 	  $('#add-quote-modal').modal('show');
@@ -120,8 +146,13 @@ rh.moviequotes.enableButtons = function() {
   });
   
   $('#outputLog').on('click', '.individual-edit-button', function() {
-	  console.log('TODO: Implement Edit quote');
-	  //rh.moviequotes.editQuote($(this));
+	  $('#myModalLabel').html('Edit movie quote');
+	  $('#add-quote-button').html("Edit Quote");
+	  rh.moviequotes.selectedId = rh.moviequotes.getQuoteId($(this));
+	  var selectedQuote = rh.moviequotes.quotes[rh.moviequotes.selectedId];
+	  $('#movie_title').val(selectedQuote.movie_title);
+	  $('#quote').val(selectedQuote.quote);
+	  $('#add-quote-modal').modal('show');
   });
   
   $('#outputLog').on('click', '.individual-delete-button', function() {
@@ -161,8 +192,11 @@ rh.moviequotes.endpoints.listMovieQuotes = function() {
         	$('#outputLog').html('');
           resp.items = resp.items || [];
           // Loop through in reverse order since the newest goes on top.
+          rh.moviequotes.quotes = {}
           for (var i = resp.items.length - 1; i >= 0; i--) {
-            rh.moviequotes.print(resp.items[i]);
+        	var movieQuote = resp.items[i];
+            rh.moviequotes.print(movieQuote);
+            rh.moviequotes.quotes[movieQuote.id] = movieQuote;
           }
         }
       });
@@ -174,17 +208,22 @@ rh.moviequotes.endpoints.listMovieQuotes = function() {
  * @param {string} movieTitle Title of the movie for the quote
  * @param {string} quote Quote from the movie.
  */
-rh.moviequotes.endpoints.insertMovieQuote = function(movieTitle, quote, existingId) {
+rh.moviequotes.endpoints.insertMovieQuote = function(movieTitle, quote) {
   var postJson = {
 	      'movie_title': movieTitle,
 	      'quote': quote
 	    };
-  if (existingId) {
-	  postJson.id = existingId
+  if (rh.moviequotes.selectedId != rh.moviequotes.NO_ID_SELECTED) {
+	  postJson.id = rh.moviequotes.selectedId;
   }
   gapi.client.moviequotes.quote.insert(postJson).execute(function(resp) {
       if (!resp.code) {
-        rh.moviequotes.print(resp);
+    	  if (rh.moviequotes.selectedId == rh.moviequotes.NO_ID_SELECTED) {
+    	     rh.moviequotes.print(resp);  
+    	  } else {
+    		  $('#' + rh.moviequotes.selectedId + ' .list-group-item-heading').html(movieTitle);
+    		  $('#' + rh.moviequotes.selectedId + ' .list-group-item-text').html(quote);
+    	  }
       }
     });
   $('#add-quote-modal').modal('hide');
@@ -194,13 +233,13 @@ rh.moviequotes.endpoints.insertMovieQuote = function(movieTitle, quote, existing
  * Delete a movie quote
  * @param {int} id Id of the movieQuote to delete
  */
-rh.moviequotes.endpoints.deleteMovieQuote = function(movieQuoteId, $row) {
+rh.moviequotes.endpoints.deleteMovieQuote = function(movieQuoteId) {
   gapi.client.moviequotes.quote.delete({
       'id': movieQuoteId
     }).execute(function(resp) {
       if (!resp.code) {
-    	  console.log("Deleted now remove from DOM");
-    	  $row.slideUp();
+    	  console.log("Deleting now remove from DOM");
+    	  $('#' + movieQuoteId).slideUp();
       }
     });
 };
