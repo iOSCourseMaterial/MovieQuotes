@@ -34,20 +34,20 @@ rh.moviequotes.selectedId = rh.moviequotes.NO_ID_SELECTED;
  * param {Object} movieQuote MovieQuote to print.
  */
 rh.moviequotes.print = function(movieQuote) {
-	$titleEl = $('<h2></h2>').addClass('list-group-item-heading').html(movieQuote.movie_title);
-	$quoteEl = $('<p></p>').addClass('list-group-item-text').html(movieQuote.quote);
+	$titleEl = $('<h2></h2>').html(movieQuote.movie_title);
+	$quoteEl = $('<p></p>').html(movieQuote.quote);
 	$quoteInfo = $('<div class="quote-info"></div>').append($titleEl).append($quoteEl);
 
 	$buttonGroup = $('<div class="row-buttons"></div>');
-	$buttonGroup.append('<button class = "btn btn-success individual-edit-button">Edit</button>');
-	$buttonGroup.append('<button class = "btn btn-danger individual-delete-button">Delete</button>');
+	$buttonGroup.append('<button class = "individual-edit-button">Edit</button>');
+	$buttonGroup.append('<button class = "individual-delete-button">Delete</button>');
 	
 	if (rh.moviequotes.editEnabled) {
 		$quoteInfo.addClass('narrow-for-edit');
 	} else {
 		$buttonGroup.hide();
 	}
-	$movieQuoteEl = $('<li></li>').attr('id', movieQuote.id).addClass('list-group-item').append($quoteInfo).append($buttonGroup);
+	$movieQuoteEl = $('<li></li>').attr('id', movieQuote.id).addClass('movie-quote-item').append($quoteInfo).append($buttonGroup).append('<hr>');
 	$('#outputLog').prepend($movieQuoteEl);
 };
 
@@ -72,7 +72,6 @@ rh.moviequotes.toggleEdit = function() {
 }
 
 
-
 /**
  * 
  */
@@ -82,7 +81,7 @@ rh.moviequotes.deleteQuote = function ($deleteButton) {
 	var parentEls = $deleteButton.parents();
 	for (var i = 0; i < parentEls.length; i++) {
 		$parent = $(parentEls[i]);
-		if ($parent.hasClass('list-group-item')) {
+		if ($parent.hasClass('movie-quote-item')) {
 			quoteId = $parent.attr('id');
 			break;
 		}
@@ -99,7 +98,7 @@ rh.moviequotes.enableButtons = function() {
   $('#display-add-quote-modal').click(function() {
 	  $('#movie_title').val('');
 	  $('#quote').val('');
-	  $('#add-quote-modal').modal('show');
+	  $( "#dialog-form" ).dialog( "open" );
   });
 
   $('#refresh-button').click( function() {
@@ -108,15 +107,9 @@ rh.moviequotes.enableButtons = function() {
 	  }
 	  rh.moviequotes.endpoints.listMovieQuotes();
   });
-
-  $('#add-quote-button').click(function() {
-    rh.moviequotes.endpoints.insertMovieQuote(
-  		  $('#movie_title').val(),
-		  $('#quote').val());
-  });
   
   $('#toggle-edit-mode-button').click( function() {
-	 rh.moviequotes.toggleEdit(); 
+	 rh.moviequotes.toggleEdit();
   });
   
   $('#outputLog').on('click', '.individual-edit-button', function() {
@@ -135,10 +128,10 @@ rh.moviequotes.enableButtons = function() {
  * @param {string} apiRoot Root of the API's path.
  */
 rh.moviequotes.init = function(apiRoot) {
-	console.log("init called");
+	console.log("init called but doing nothing for now.");
   var apisToLoad;
   var callback = function() {
-	  console.log("Loaded an api");
+	console.log("Loaded an api");
     if (--apisToLoad == 0) {
       rh.moviequotes.enableButtons();
       rh.moviequotes.endpoints.listMovieQuotes();
@@ -147,6 +140,35 @@ rh.moviequotes.init = function(apiRoot) {
   apisToLoad = 1; // must match number of calls to gapi.client.load()
   gapi.client.load('moviequotes', 'v1', callback, apiRoot);
 };
+
+
+// ---------- Code the runs before Endpoints js is ready ----------
+$(document).ready( function() {
+	$( "#menu" ).menu();
+	$( "#dialog-form" ).dialog({
+	      autoOpen: false,
+	      height: 330,
+	      width: 750,
+	      modal: true,
+	      buttons: {
+	        "Add a Movie Quote": function() {
+	            rh.moviequotes.endpoints.insertMovieQuote(
+	            	  $('#movie_title').val(),
+	          		  $('#quote').val());
+	          $( this ).dialog( "close" );
+	        },
+	        Cancel: function() {
+	          $( this ).dialog( "close" );
+	        }
+	      }
+	    });
+
+	
+	
+	
+});
+
+
 
 
 // ----------------------- Endpoints methods -----------------------
@@ -187,7 +209,6 @@ rh.moviequotes.endpoints.insertMovieQuote = function(movieTitle, quote, existing
         rh.moviequotes.print(resp);
       }
     });
-  $('#add-quote-modal').modal('hide');
 };
 
 /**

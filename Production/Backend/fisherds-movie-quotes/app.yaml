@@ -24,6 +24,12 @@ handlers:
   upload: static/bootstrap\.html
   secure: always
 
+# JavaScript Ajax web client
+- url: /jqueryui\.html
+  static_files: static/jqueryui.html
+  upload: static/jqueryui\.html
+  secure: always
+
 # Main handler
 - url: /.*
   script: main.app
