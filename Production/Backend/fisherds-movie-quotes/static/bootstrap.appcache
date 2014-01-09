@@ -1,0 +1,13 @@
+CACHE MANIFEST
+
+CACHE:
+//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js
+/static/js/bootstrap.min.js
+/static/js/mybootstrap.js
+/static/stylesheets/bootstrap.min.css
+/static/stylesheets/bootstrap-theme.min.css
+/static/stylesheets/mybootstrap.css
+
+
+NETWORK:
+*

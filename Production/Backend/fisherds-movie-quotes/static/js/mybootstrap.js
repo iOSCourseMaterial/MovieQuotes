@@ -165,7 +165,7 @@ rh.moviequotes.enableButtons = function() {
  * Initializes the application.
  * @param {string} apiRoot Root of the API's path.
  */
-rh.moviequotes.init = function(apiRoot) {
+rh.moviequotes.onClientJsLoad = function(apiRoot) {
 	console.log("init called");
   var apisToLoad;
   var callback = function() {
@@ -215,14 +215,13 @@ rh.moviequotes.endpoints.insertMovieQuote = function(movieTitle, quote) {
 	    };
   if (rh.moviequotes.selectedId != rh.moviequotes.NO_ID_SELECTED) {
 	  postJson.id = rh.moviequotes.selectedId;
+	  $('#' + rh.moviequotes.selectedId + ' .list-group-item-heading').html(movieTitle);
+	  $('#' + rh.moviequotes.selectedId + ' .list-group-item-text').html(quote);
   }
   gapi.client.moviequotes.quote.insert(postJson).execute(function(resp) {
       if (!resp.code) {
     	  if (rh.moviequotes.selectedId == rh.moviequotes.NO_ID_SELECTED) {
     	     rh.moviequotes.print(resp);  
-    	  } else {
-    		  $('#' + rh.moviequotes.selectedId + ' .list-group-item-heading').html(movieTitle);
-    		  $('#' + rh.moviequotes.selectedId + ' .list-group-item-text').html(quote);
     	  }
       }
     });

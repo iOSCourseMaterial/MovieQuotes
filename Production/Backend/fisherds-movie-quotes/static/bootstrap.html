@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html manifest="/static/bootstrap.appcache">
 <head>
     <title>Movie Quotes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,7 +78,7 @@
 </div>
 	<script type="text/javascript">
         function init() {
-        	rh.moviequotes.init('//' + window.location.host + '/_ah/api');
+        	rh.moviequotes.onClientJsLoad('//' + window.location.host + '/_ah/api');
         }
     </script>
 	<script src="https://apis.google.com/js/client.js?onload=init"></script>
