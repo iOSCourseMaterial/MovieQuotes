@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-<html manifest="/static/bootstrap.appcache">
+
+<!-- When using appcache do this -->
+<!-- <html manifest="/static/bootstrap.appcache"> -->
+
+<!-- When testing without appcache do this -->
+<html>
+
 <head>
     <title>Movie Quotes</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -77,10 +83,7 @@
 
 </div>
 	<script type="text/javascript">
-        function init() {
-        	rh.moviequotes.onClientJsLoad('//' + window.location.host + '/_ah/api');
-        }
+ 	    rh.moviequotes.init();
     </script>
-	<script src="https://apis.google.com/js/client.js?onload=init"></script>
 </body>
 </html>

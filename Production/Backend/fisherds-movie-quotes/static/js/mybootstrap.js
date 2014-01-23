@@ -9,35 +9,48 @@
 var rh = rh || {};
 rh.moviequotes = rh.moviequotes || {};
 rh.moviequotes.endpoints = rh.moviequotes.endpoints || {};
+rh.moviequotes.localstorage = rh.moviequotes.localstorage || {};
 
 /**
- * @param {Object} Map of IDs to movieQuotes.
+ * @param {Object}
+ *            Map of IDs to movieQuotes.
  */
 rh.moviequotes.quotes = {}
 
 
 /**
- * @param {bool} Tracks the editing status.
+ * @param {bool}
+ *            Tracks the editing status.
  */
 rh.moviequotes.editEnabled = false;
 
 
 /**
- * @param {number} Constant for when to ID is selected.
+ * @param {number}
+ *            Constant for when to ID is selected.
  * @const
  */
 rh.moviequotes.NO_ID_SELECTED = -1;
 
 
 /**
- * @param {number} Tracks the editing status.
+ * @param {number}
+ *            Tracks the editing status.
  */
 rh.moviequotes.selectedId = rh.moviequotes.NO_ID_SELECTED;
 
 
 /**
- * Prints a movie quote to the log.
- * param {Object} movieQuote MovieQuote to print.
+ * @param {bool}
+ *            Flag to indicate if messages should be sent to Endpoints or simply
+ *            stored.
+ */
+rh.moviequotes.moviequotesApiDidLoad = false;
+
+
+/**
+ * Prints a movie quote to the log. param {Object} movieQuote MovieQuote to
+ * print.
  */
 rh.moviequotes.print = function(movieQuote) {
 	$titleEl = $('<h2></h2>').addClass('list-group-item-heading').html(movieQuote.movie_title);
@@ -77,6 +90,7 @@ rh.moviequotes.toggleEdit = function() {
 	}
 }
 
+
 /**
  * Finds the ID for the MovieQuote using the list-group-item's id attribute.
  */
@@ -94,6 +108,7 @@ rh.moviequotes.getQuoteId = function($rowButton) {
 	return quoteId;
 }
 
+
 /**
  * Deletes the MovieQuote for this row.
  */
@@ -103,16 +118,6 @@ rh.moviequotes.deleteQuote = function ($deleteButton) {
 		rh.moviequotes.endpoints.deleteMovieQuote(quoteId);
 	}
 }
-
-
-/**
- * Edits the MovieQuote for this row.
- */
-rh.moviequotes.editQuote = function ($editButton) {
-	
-
-}
-
 
 
 /**
@@ -136,9 +141,15 @@ rh.moviequotes.enableButtons = function() {
   });
 
   $('#add-quote-button').click(function() {
-    rh.moviequotes.endpoints.insertMovieQuote(
-  		  $('#movie_title').val(),
-		  $('#quote').val());
+	if (rh.moviequotes.moviequotesApiDidLoad) {
+	    rh.moviequotes.endpoints.insertMovieQuote(
+	  		  $('#movie_title').val(),
+			  $('#quote').val());
+	  } else {
+		  rh.moviequotes.localstorage.insertMovieQuote(
+	  		  $('#movie_title').val(),
+			  $('#quote').val());  
+	  }
   });
   
   $('#toggle-edit-mode-button').click( function() {
@@ -161,17 +172,80 @@ rh.moviequotes.enableButtons = function() {
   
 };
 
+
+rh.moviequotes.enableNetworkListeners = function() {
+
+	// TODO: Implement with my system.
+	
+//	window.addEventListener("online", function() {
+//		if(rh.moviequotes.localEntryCount > 0){
+//
+//			for(var i = rh.moviequotes.localDeletesNeededCount; i >=0 ;i--){
+//			
+//			}
+//
+//		for(var i = rh.moviequotes.localInsertsNeededCount; i >=0 ;i--){
+//		 	 var jsonObj = JSON.parse(localStorage["moviequote"+i]);
+//		  gapi.client.moviequotes.quote.insert({
+//		 'movie_title': jsonObj.movie_title,
+//		 'quote': jsonObj.quote
+//		}).execute(function(resp) {
+//		  localStorage.removeItem("moviequote"+i);
+//		 	 });
+//		 	 }
+//		 	
+//		$(".jumbotron").prepend("<p class = 'alert alert-info'>"+rh.moviequotes.localEntryCount+ " local stored post have been uploaded <p>");
+//		 	 setTimeout(function() {
+//		$('.alert').fadeOut();
+//		}, 2000 );
+//		  rh.moviequotes.localEntryCount = 0;
+//		 	}
+//		}, true);
+//
+//		window.addEventListener("offline", function() {
+//		$(".jumbotron").prepend("<p class = 'alert alert-warning'>You are now in offline mode<p>");
+//		setTimeout(function() {
+//		$('.alert').fadeOut();
+//		}, 2000 );
+//		}, true);
+};
+
+
+
+/**
+ * Initializes the content that can be on-line or off-line.
+ */
+rh.moviequotes.init = function() {
+	console.log("Initialize even for off-line.");
+    rh.moviequotes.enableButtons();
+    rh.moviequotes.enableNetworkListeners();
+    rh.moviequotes.localstorage.listMovieQuotes();
+    
+    
+    // TESTING
+    $.getScript('https://apis.google.com/js/client.js?onload=clientJsLoaded', function() {
+    	console.log("Added not loaded yet");
+    });
+    
+}
+
+function clientJsLoaded() {
+	rh.moviequotes.onClientJsLoad('//' + window.location.host + '/_ah/api');
+}
+
 /**
  * Initializes the application.
- * @param {string} apiRoot Root of the API's path.
+ * 
+ * @param {string}
+ *            apiRoot Root of the API's path.
  */
 rh.moviequotes.onClientJsLoad = function(apiRoot) {
-	console.log("init called");
+	console.log("Client JS did load");
   var apisToLoad;
   var callback = function() {
 	  console.log("Loaded an api");
     if (--apisToLoad == 0) {
-      rh.moviequotes.enableButtons();
+    	rh.moviequotes.moviequotesApiDidLoad = true;
       rh.moviequotes.endpoints.listMovieQuotes();
     }
   }
@@ -180,7 +254,29 @@ rh.moviequotes.onClientJsLoad = function(apiRoot) {
 };
 
 
-// ----------------------- Endpoints methods -----------------------
+//----------------------- localStorage methods -----------------------
+
+/**
+ * Lists MovieQuotes via the localStorage values.
+ */
+rh.moviequotes.localstorage.listMovieQuotes = function() {
+	if (!localStorage['last_list_response']) {
+		console.log('No localStorage data to display');
+		return;
+	}
+	items = JSON.parse(localStorage['last_list_response']).items || [];
+	console.log("offline items length = " + items.length)
+    // Loop through in reverse order since the newest goes on top.
+    rh.moviequotes.quotes = {}
+    for (var i = items.length - 1; i >= 0; i--) {
+  	var movieQuote = items[i];
+      rh.moviequotes.print(movieQuote);
+      rh.moviequotes.quotes[movieQuote.id] = movieQuote;
+    }
+}
+
+
+//----------------------- Endpoints methods -----------------------
 
 /**
  * Lists MovieQuotes via the API.
@@ -189,6 +285,7 @@ rh.moviequotes.endpoints.listMovieQuotes = function() {
   gapi.client.moviequotes.quote.list({'order': '-last_touch_date_time'}).execute(
       function(resp) {
         if (!resp.code) {
+            localStorage['last_list_response'] = JSON.stringify(resp);
         	$('#outputLog').html('');
           resp.items = resp.items || [];
           // Loop through in reverse order since the newest goes on top.
@@ -205,8 +302,11 @@ rh.moviequotes.endpoints.listMovieQuotes = function() {
 
 /**
  * Insert a movie quote
- * @param {string} movieTitle Title of the movie for the quote
- * @param {string} quote Quote from the movie.
+ * 
+ * @param {string}
+ *            movieTitle Title of the movie for the quote
+ * @param {string}
+ *            quote Quote from the movie.
  */
 rh.moviequotes.endpoints.insertMovieQuote = function(movieTitle, quote) {
   var postJson = {
@@ -221,16 +321,19 @@ rh.moviequotes.endpoints.insertMovieQuote = function(movieTitle, quote) {
   gapi.client.moviequotes.quote.insert(postJson).execute(function(resp) {
       if (!resp.code) {
     	  if (rh.moviequotes.selectedId == rh.moviequotes.NO_ID_SELECTED) {
-    	     rh.moviequotes.print(resp);  
+    	     rh.moviequotes.print(resp);
     	  }
       }
     });
   $('#add-quote-modal').modal('hide');
 };
 
+
 /**
  * Delete a movie quote
- * @param {int} id Id of the movieQuote to delete
+ * 
+ * @param {int}
+ *            id Id of the movieQuote to delete
  */
 rh.moviequotes.endpoints.deleteMovieQuote = function(movieQuoteId) {
   gapi.client.moviequotes.quote.delete({
